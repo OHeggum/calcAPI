@@ -3,6 +3,7 @@ package com.example.calcapi;
 import com.example.calcapi.entity.CalculatorUser;
 import com.example.calcapi.repository.CalculatorUserRepository;
 import com.example.calcapi.request.CalculationRequest;
+import com.example.calcapi.request.LoginRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -54,12 +55,6 @@ public class CalcController {
 		LOGGER.log(Level.INFO, asString);
 		return ResponseEntity.ok(result);
 	}
-
-//	@PostMapping("/login")
-//	public ResponseEntity<?> login(@RequestBody CalculatorUser user) {
-//		String username = user.getName();
-//		String pass = user.getPassword();
-//	}
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
