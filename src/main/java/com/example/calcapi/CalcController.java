@@ -1,5 +1,9 @@
 package com.example.calcapi;
 
+import com.example.calcapi.entity.CalculatorUser;
+import com.example.calcapi.repository.CalculatorUserRepository;
+import com.example.calcapi.request.CalculationRequest;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +55,12 @@ public class CalcController {
 		return ResponseEntity.ok(result);
 	}
 
+//	@PostMapping("/login")
+//	public ResponseEntity<?> login(@RequestBody CalculatorUser user) {
+//		String username = user.getName();
+//		String pass = user.getPassword();
+//	}
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
@@ -65,16 +75,16 @@ public class CalcController {
 		SpringApplication.run(CalcController.class, args);
 	}
 
-	public static class CalculationRequest {
-		private double op1;
-		private double op2;
-
-		public double getOp1() {
-			return op1;
-		}
-
-		public double getOp2() {
-			return op2;
-		}
+	@Bean
+	public CommandLineRunner run(CalculatorUserRepository repository) {
+		return (args -> {
+			insertJavaAdvocates(repository);
+			System.out.println(repository.findAll());
+		});
 	}
+
+	private void insertJavaAdvocates(CalculatorUserRepository repository) {
+		repository.save(new CalculatorUser("hello", "pass"));
+	}
+
 }
