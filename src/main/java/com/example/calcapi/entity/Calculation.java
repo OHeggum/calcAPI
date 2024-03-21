@@ -9,11 +9,13 @@ public class Calculation {
     @Id
     @GeneratedValue
     private Long id;
+    private int userID;
     private double op1;
     private double op2;
     private double operator;
 
-    public Calculation(double op1, double op2, double operator) {
+    public Calculation(int userID, double op1, double op2, double operator) {
+        this.userID = userID;
         this.op1 = op1;
         this.op2 = op2;
         this.operator = operator;

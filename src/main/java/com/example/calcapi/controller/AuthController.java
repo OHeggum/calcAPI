@@ -1,6 +1,7 @@
 package com.example.calcapi.controller;
 
 import com.example.calcapi.entity.CalculatorUser;
+import com.example.calcapi.repository.CalculatorUserRepository;
 import com.example.calcapi.request.LoginRequest;
 import com.example.calcapi.service.CalcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +17,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private CalcUserService userService;
+    private CalculatorUserRepository userRepository;
 
     @PostMapping("/loginOrRegister")
-    public ResponseEntity<String> loginOrRegister(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Integer> loginOrRegister(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getName();
         String password = loginRequest.getPassword();
 
+        int userID;
+
         // Check if the provided username exists
-        CalculatorUser user = userService.getUserByName(username);
+        CalculatorUser user = userRepository.findByName(username);
         if (user == null) {
             // If the user doesn't exist, create a new user
-            userService.createUser(username, password);
-            return ResponseEntity.ok("User registered successfully");
+            CalculatorUser newUser = new CalculatorUser();
+            newUser.setName(username);
+            newUser.setPassword(password);
+            userRepository.save(newUser);
+            userID = userRepository.findIdByNameAndPassword(username, password);
+            return ResponseEntity.ok(userID);
         } else {
             // If the user exists, check if the password matches
             if (user.getPassword().equals(password)) {
-                return ResponseEntity.ok("Login successful");
+                userID = userRepository.findIdByNameAndPassword(username, password);
+                return ResponseEntity.ok(userID);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed due to wrong password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(999);
             }
         }
     }
