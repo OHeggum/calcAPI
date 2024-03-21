@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CalculatorUserRepository extends CrudRepository<CalculatorUser, Long> {
     List<CalculatorUser> findCalculatorUserByName(String sr);
-    static CalculatorUser findByName(String Name);
+    CalculatorUser findByName(String Name);
 
     List<CalculatorUser> findAppUserById(Long id);
     CalculatorUser findAppUserByNameAndPassword(String username, String password);
